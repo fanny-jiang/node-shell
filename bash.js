@@ -6,12 +6,14 @@ process.stdout.write('prompt > ');
 // The stdin 'data' event fires after a user types in a line
 process.stdin.on('data', function (data) {
   var cmd = data.toString().trim(); // remove the newline
+  var commands = require('./command');
+  commands[cmd](cmd);
 
-  if (cmd === "pwd") {
-    // process.stdout.write(process.env.PWD); // this works too!
-    process.stdout.write(process.cwd());
-    process.stdout.write('\nprompt > ');
-  }
+  // if (cmd === "pwd") {
+  //   // process.stdout.write(process.env.PWD); // this works too!
+  //   process.stdout.write(process.cwd());
+  //   process.stdout.write('\nprompt > ');
+  // }
 
   if (cmd === "date") {
     process.stdout.write(Date().toString());
