@@ -27,19 +27,19 @@ module.exports = {
             // }
         },
 
-    timeout: function() {
-        if (cmd === 'timeout') {
-            var startTime = new Date;
+    // timeout: function() {
+    //     if (cmd === 'timeout') {
+    //         var startTime = new Date;
 
-            setTimeout(function () { // callback functions don't stop your program
-                var endTime = new Date;
-                console.log('Time elapsed: ', endTime - startTime, 'ms');
-            }, 500);
+    //         setTimeout(function () { // callback functions don't stop your program
+    //             var endTime = new Date;
+    //             console.log('Time elapsed: ', endTime - startTime, 'ms');
+    //         }, 500);
 
-            while (new Date - startTime < 250) {}; // this happens first
-        }
+    //         while (new Date - startTime < 250) {}; // this happens first
+    //     }
 
-    },
+    // },
 
     echo: function(cmd) {
         process.stdout.write(cmd.split(" ").slice(1).join(" "))
@@ -97,11 +97,20 @@ module.exports = {
                 counter ++;
                 if(counter >= numLines - 5) console.log(line);
         });
-         process.stdout.write('\nprompt > ');
+        process.stdout.write('\nprompt > ');
+
+    },
+
+    curl: function(cmd) {
+        var url = cmd.split(" ")[1];
+        var request = require('request');
+        request(url, function (error, response, body) {
+            console.log('error:', error); // Print the error if one occurred
+            // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+            console.log('body:', body); // Print the HTML for the Google homepage.
+        });
+        process.stdout.write('\nprompt > ');
 
     }
-           
-
-
 
 };
