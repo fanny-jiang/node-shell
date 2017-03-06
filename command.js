@@ -1,21 +1,21 @@
 module.exports = {
-    pwd: function(cmd) {
-        if (cmd === "pwd") {
-         // process.stdout.write(process.env.PWD); // this works too!
+    pwd: function() {
+        // if (cmd === "pwd") {
+            process.stdout.write(process.env.PWD); // this works too!
             process.stdout.write(process.cwd());
             process.stdout.write('\nprompt > ');
-        }
+        // }
     },
 
-    date: function(cmd) {
-        if (cmd === "date") {
+    date: function() {
+        // if (cmd === "date") {
             process.stdout.write(Date().toString());
             process.stdout.write('\nprompt > ');
-        }
+        // }
     },
 
-    ls: function(cmd){
-        if (cmd === 'ls'){
+    ls: function(){
+        // if (cmd === 'ls'){
             var fs = require('fs');
             fs.readdir('.', function(err, files) {
                 if (err) throw err;
@@ -24,10 +24,10 @@ module.exports = {
             });
                 process.stdout.write('\nprompt > ');
             });
-            }
+            // }
         },
 
-    timeout: function(cmd) {
+    timeout: function() {
         if (cmd === 'timeout') {
             var startTime = new Date;
 
@@ -39,5 +39,11 @@ module.exports = {
             while (new Date - startTime < 250) {}; // this happens first
         }
 
-        }
+    },
+
+    echo: function(cmd) {
+        process.stdout.write(cmd.split(" ").slice(1).join(" "))
+        process.stdout.write('\nprompt > ');
+    }
+
     };
