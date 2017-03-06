@@ -1,30 +1,34 @@
 module.exports = {
-    pwd: function() {
+    pwd: function(file, done) {
         // if (cmd === "pwd") {
-            process.stdout.write(process.env.PWD); // this works too!
-            process.stdout.write(process.cwd());
-            process.stdout.write('\nprompt > ');
+            var output = "";
+            output+=(process.env.PWD); // this works too!
+            //output+=(process.cwd());
+            done(output);
         // }
     },
 
-    date: function() {
+    date: function(file, done) {
         // if (cmd === "date") {
-            process.stdout.write(Date().toString());
-            process.stdout.write('\nprompt > ');
+            var output = "";
+            output+=(Date().toString());
+            done(output);
         // }
     },
 
-    ls: function(){
+    ls: function(file, done){
         // if (cmd === 'ls'){
+            var output = "";
             var fs = require('fs');
             fs.readdir('.', function(err, files) {
                 if (err) throw err;
                 files.forEach(function(file) {
-                process.stdout.write(file.toString() + "\n");
+                output += file.toString() + "\n";
             });
-                process.stdout.write('\nprompt > ');
+            done(output);
             });
             // }
+
         },
 
     // timeout: function() {
@@ -33,7 +37,7 @@ module.exports = {
 
     //         setTimeout(function () { // callback functions don't stop your program
     //             var endTime = new Date;
-    //             console.log('Time elapsed: ', endTime - startTime, 'ms');
+    //             output += ('Time elapsed: ', endTime - startTime, 'ms');
     //         }, 500);
 
     //         while (new Date - startTime < 250) {}; // this happens first
@@ -41,25 +45,28 @@ module.exports = {
 
     // },
 
-    echo: function(cmd) {
-        process.stdout.write(cmd.split(" ").slice(1).join(" "))
-        process.stdout.write('\nprompt > ');
+    echo: function(cmd, done) {
+        var output = "";
+        output+=(cmd.split(" ").slice(1).join(" "))
+        done(output);
     },
 
-    cat: function(cmd){
+    cat: function(cmd, done){
+        var output = "";
         var filename = cmd.split(' ')[1];
         var fs = require('fs');
         fs.readFile(filename, 'utf8', function (err, data) {
             if (err) {
-            return console.log('File not found, oh no!');
+            return output += ('File not found, oh no!');
         }
-        console.log(data);
-        process.stdout.write('\nprompt > ');
+        output += (data);
+        done(output);
     });
 
     },
 
-    head: function(cmd){
+    head: function(cmd, done){//not outputting anything 
+        var output = "";
         var filename = cmd.split(' ')[1];
         const readline = require('readline');
         const fs = require('fs');
@@ -70,12 +77,13 @@ module.exports = {
         var counter = 0;
         rl.on('line', (line) => {
                 counter ++;
-                if(counter <= 5) console.log(line);
+                if(counter <= 5) output += (line);
         });
-         process.stdout.write('\nprompt > ');
+         done(output);
     },
 
-    tail: function(cmd){
+    tail: function(cmd, done){//no prompt
+        var output = "";
         var filename = cmd.split(' ')[1];
 
         // Count number of lines
@@ -84,7 +92,6 @@ module.exports = {
         var fileBuffer =  fs.readFileSync(filename),
         to_string = fileBuffer.toString(),
         numLines = to_string.split("\n").length;
-        console.log(numLines);
 
 
         const readline = require('readline');
@@ -95,22 +102,22 @@ module.exports = {
         var counter = 0;
         rl.on('line', (line) => {
                 counter ++;
-                if(counter >= numLines - 5) console.log(line);
+                if(counter >= numLines - 5) output += line;
         });
-        process.stdout.write('\nprompt > ');
+        done(output);
 
     },
 
-    curl: function(cmd) {
+    curl: function(cmd, done) {
+        var output = "";
         var url = cmd.split(" ")[1];
         var request = require('request');
         request(url, function (error, response, body) {
             console.log('error:', error); // Print the error if one occurred
             // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-            console.log('body:', body); // Print the HTML for the Google homepage.
+            output += ('body:', body); // Print the HTML for the Google homepage.
         });
-        process.stdout.write('\nprompt > ');
-
+        done(output);
     }
 
 };
