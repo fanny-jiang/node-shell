@@ -7,10 +7,10 @@ process.stdout.write('prompt > ');
 process.stdin.on('data', function (data) {
   var cmd = data.toString().trim(); // remove the newline
   var commands = require('./command'); // commands is an object
-  if (cmd === "pwd" || cmd === "date" || cmd === "ls") {
-    commands[cmd]; // cmd is a property on commands and we also called our passed in cmd on this property
-  } else if (cmd.split(" ")[0] === "echo") {
-    commands["echo"](cmd);
-  }
+  commands[cmd.split(" ")[0]](cmd);
+  // if (cmd === "pwd" || cmd === "date" || cmd === "ls") {
+  //   commands[cmd.split(" ")[0]]; // cmd is a property on commands and we also called our passed in cmd on this property
+  // } else if (cmd.split(" ")[0] === "echo") {
+  //   commands["echo"](cmd);
+  // }
 });
-

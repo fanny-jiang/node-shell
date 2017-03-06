@@ -44,6 +44,64 @@ module.exports = {
     echo: function(cmd) {
         process.stdout.write(cmd.split(" ").slice(1).join(" "))
         process.stdout.write('\nprompt > ');
-    }
+    },
 
-    };
+    cat: function(cmd){
+        var filename = cmd.split(' ')[1];
+        var fs = require('fs');
+        fs.readFile(filename, 'utf8', function (err, data) {
+            if (err) {
+            return console.log('File not found, oh no!');
+        }
+        console.log(data);
+        process.stdout.write('\nprompt > ');
+    });
+
+    },
+
+    head: function(cmd){
+        var filename = cmd.split(' ')[1];
+        const readline = require('readline');
+        const fs = require('fs');
+        const rl = readline.createInterface({
+            input: fs.createReadStream(filename)
+        });
+
+        var counter = 0;
+        rl.on('line', (line) => {
+                counter ++;
+                if(counter <= 5) console.log(line);
+        });
+         process.stdout.write('\nprompt > ');
+    },
+
+    tail: function(cmd){
+        var filename = cmd.split(' ')[1];
+
+        // Count number of lines
+
+        var fs = require('fs');
+        var fileBuffer =  fs.readFileSync(filename),
+        to_string = fileBuffer.toString(),
+        numLines = to_string.split("\n").length;
+        console.log(numLines);
+
+
+        const readline = require('readline');
+        const rl = readline.createInterface({
+            input: fs.createReadStream(filename)
+        });
+
+        var counter = 0;
+        rl.on('line', (line) => {
+                counter ++;
+                if(counter >= numLines - 5) console.log(line);
+        });
+         process.stdout.write('\nprompt > ');
+
+    }
+           
+
+
+
+};
